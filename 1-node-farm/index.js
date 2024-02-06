@@ -26,17 +26,29 @@ const url = require('url');
 // console.log('Will read the file');
 
 /* Server routing */
+
+//a variavel dirname representa o diretorio de onde estamos executando agr
+//é um blocking code MAS só é executado quando a aplicação inicia e nao a cada requisição.
+const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, 'utf-8'); //array
+const dataProducts = JSON.parse(data); // json.parse transforma nossa json(que é tudo string) em um objeto
+
 const server = http.createServer((req, res) => {
   const pathName = req.url;
-  (pathName === '/overview' || pathName === '/' 
+  (pathName === '/overview' || pathName === '/') 
   ? (res.end('This is the overview')) 
+  : (pathName ==='/api')
+  ? (      
+      res.writeHead(200, {'Content-type': 'application/json'}),
+      res.end(data)
+    )
   : (pathName === '/product') 
   ? (res.end('This is the Product')) 
   : (res.writeHead(404, {
     'Content-type': 'text/html',
   }),
-  res.end('<h1>Not Found</h1>')))
-});
+  res.end('<h1>Not found page</h1>'));
+})
+
 server.listen(8000, () => {
   console.log('Listening to requests on port 8000');
 });
