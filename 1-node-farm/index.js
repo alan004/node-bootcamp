@@ -1,6 +1,7 @@
 const fs = require('fs');
 const http = require('http');
 const url = require('url');
+const replaceTemplate = require('./modules/replaceTemplate');
 
 /* Files: */
 //Blocking example:
@@ -32,18 +33,7 @@ const url = require('url');
 const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, 'utf-8'); //array
 const dataProducts = JSON.parse(data); // json.parse transforma nossa json(que é tudo string) em um objeto
 
-const replaceTemplate = (template, product) => {
-  let output = template.replace(/{%PRODUCTNAME%}/g, product.productName);
-  output = output.replace(/{%IMAGE%}/g, product.image);
-  output = output.replace(/{%FROM%}/g, product.from);
-  output = output.replace(/{%NUTRIENTS%}/g, product.nutrients);
-  output = output.replace(/{%QUANTITY%}/g, product.quantity);
-  output = output.replace(/{%PRICE%}/g, product.price);
-  if (!product.organic) output = output.replace(/{%NOT_ORGANIC%}/g,'not-organic');
-  output = output.replace(/{%DESCRIPTION%}/g, product.description);
-  output = output.replace(/{%ID%}/g, product.id);
-  return output;
-}
+
 
 //ler os templates antes de ter as requisições
 const templateOverview = fs.readFileSync(`${__dirname}/templates/template-overview.html`, 'utf-8'); 
